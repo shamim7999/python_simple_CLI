@@ -1,40 +1,5 @@
-# main.py
 from argparse import ArgumentParser, Namespace
-import dao.db as mydb
-import models.person as person_module
-
-
-def add_money(person_id, amount):
-    mydb.update_person_salary(person_id, amount)
-    print(f'Added {amount} to person with ID {person_id}')
-
-
-def withdraw_money(person_id, amount):
-    mydb.update_person_salary(person_id, -amount)
-    print(f'Withdrew {amount} from person with ID {person_id}')
-
-
-def get_person_info(person_id):
-    person = mydb.get_person(person_id)
-    if person:
-        print(f'Person Info: {person}')
-    else:
-        print(f'No person found with ID {person_id}')
-
-
-def delete_person(person_id):
-    mydb.delete_person(person_id)
-    print(f'Deleted person with ID {person_id}')
-
-
-def add_person(person_id, person_name, person_salary):
-    new_person = person_module.Person(person_id, person_name, person_salary)
-    mydb.add_person(new_person)
-    print(f'Added person: {new_person}')
-
-
-mydb.setup_database()
-
+import services.cli_service as cli_serv
 
 parser = ArgumentParser(description='Manage your salary.')
 subparsers = parser.add_subparsers(dest='command')
@@ -63,17 +28,24 @@ parser_get_person.add_argument('id', type=int, help='Person ID')
 parser_delete_person = subparsers.add_parser('delete_person', help='Delete a person')
 parser_delete_person.add_argument('id', type=int, help='Person ID')
 
+# List all Persons
+parser_list_persons = subparsers.add_parser('get_all_persons', help='Get List of All Persons.')
+
 args: Namespace = parser.parse_args()
 
+cli_serv.setup_database()
+
 if args.command == 'add_person':
-    add_person(args.id, args.name, args.salary)
+    cli_serv.add_person(args.id, args.name, args.salary)
 elif args.command == 'add_money':
-    add_money(args.id, args.amount)
+    cli_serv.add_money(args.id, args.amount)
 elif args.command == 'withdraw_money':
-    withdraw_money(args.id, args.amount)
+    cli_serv.withdraw_money(args.id, args.amount)
 elif args.command == 'get_person_info':
-    get_person_info(args.id)
+    cli_serv.get_person_info(args.id)
 elif args.command == 'delete_person':
-    delete_person(args.id)
+    cli_serv.delete_person(args.id)
+elif args.command == 'get_all_persons':
+    cli_serv.get_all_persons()
 else:
     parser.print_help()
