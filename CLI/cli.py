@@ -1,21 +1,21 @@
 # main.py
 from argparse import ArgumentParser, Namespace
-import db
+import dao.db as mydb
 import models.person as person_module
 
 
 def add_money(person_id, amount):
-    db.update_person_salary(person_id, amount)
+    mydb.update_person_salary(person_id, amount)
     print(f'Added {amount} to person with ID {person_id}')
 
 
 def withdraw_money(person_id, amount):
-    db.update_person_salary(person_id, -amount)
+    mydb.update_person_salary(person_id, -amount)
     print(f'Withdrew {amount} from person with ID {person_id}')
 
 
 def get_person_info(person_id):
-    person = db.get_person(person_id)
+    person = mydb.get_person(person_id)
     if person:
         print(f'Person Info: {person}')
     else:
@@ -23,17 +23,17 @@ def get_person_info(person_id):
 
 
 def delete_person(person_id):
-    db.delete_person(person_id)
+    mydb.delete_person(person_id)
     print(f'Deleted person with ID {person_id}')
 
 
 def add_person(person_id, person_name, person_salary):
     new_person = person_module.Person(person_id, person_name, person_salary)
-    db.add_person(new_person)
+    mydb.add_person(new_person)
     print(f'Added person: {new_person}')
 
 
-db.setup_database()
+mydb.setup_database()
 
 
 parser = ArgumentParser(description='Manage your salary.')
