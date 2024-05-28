@@ -47,12 +47,25 @@ parser_total_debit_yy_mm.add_argument('year', type=str, help='Enter Year')
 parser_total_debit_yy_mm.add_argument('month', type=str, help='Enter month')
 
 
+# Total Debit of yy
+parser_total_debit_yy = subparsers.add_parser('get_total_debit_by_yy', help='Get Total Debit of a specific year.')
+parser_total_debit_yy.add_argument('person_id', type=int, help='Enter person id')
+parser_total_debit_yy.add_argument('year', type=str, help='Enter Year')
+
+
 # Total Credit of yy:mm
 parser_total_credit_yy_mm = subparsers.add_parser('get_total_credit_by_yy_mm',
                                                   help='Get Total Credit of a specific year and month.')
 parser_total_credit_yy_mm.add_argument('person_id', type=int, help='Enter person id')
 parser_total_credit_yy_mm.add_argument('year', type=str, help='Enter Year')
 parser_total_credit_yy_mm.add_argument('month', type=str, help='Enter month')
+
+
+# Total Credit of yy:mm
+parser_total_credit_yy = subparsers.add_parser('get_total_credit_by_yy',
+                                               help='Get Total Credit of a specific year.')
+parser_total_credit_yy.add_argument('person_id', type=int, help='Enter person id')
+parser_total_credit_yy.add_argument('year', type=str, help='Enter Year')
 
 
 args: Namespace = parser.parse_args()
@@ -78,5 +91,9 @@ elif args.command == 'get_total_credit_by_yy_mm':
     acc_serv.get_total_credit_for_year_month(args.year, args.month, args.person_id)
 elif args.command == 'get_all_transactions':
     acc_serv.get_all_transactions()
+elif args.command == 'get_total_debit_by_yy':
+    acc_serv.get_total_debit_for_year(args.year, args.person_id)
+elif args.command == 'get_total_credit_by_yy':
+    acc_serv.get_total_credit_for_year(args.year, args.person_id)
 else:
     parser.print_help()

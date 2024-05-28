@@ -46,6 +46,42 @@ def get_total_debit_for_year_month(year, month, person_id):
         return 0  # No salary recorded for the given year and month
 
 
+def get_total_debit_for_year(year, person_id):
+    conn = sqlite3.connect('person.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+        SELECT SUM(amount) 
+        FROM account 
+        WHERE strftime('%Y', date) = ? 
+        AND type = 'debit'
+        AND person_id = ?
+    ''', (str(year), person_id))  # Zero-padding month if needed
+    row = cursor.fetchone()
+    conn.close()
+    if row and row[0] is not None:
+        return row[0]
+    else:
+        return 0  # No salary recorded for the given year and month
+
+
+def get_total_credit_for_year(year, person_id):
+    conn = sqlite3.connect('person.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+        SELECT SUM(amount) 
+        FROM account 
+        WHERE strftime('%Y', date) = ? 
+        AND type = 'credit'
+        AND person_id = ?
+    ''', (str(year), person_id))  # Zero-padding month if needed
+    row = cursor.fetchone()
+    conn.close()
+    if row and row[0] is not None:
+        return row[0]
+    else:
+        return 0  # No salary recorded for the given year and month
+
+
 def get_total_credit_for_year_month(year, month, person_id):
     conn = sqlite3.connect('person.db')
     cursor = conn.cursor()
