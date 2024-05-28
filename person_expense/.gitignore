@@ -10,6 +10,12 @@ __pycache__/
 *.pyd
 *.pdb
 
+# Ignore virtual environments
+venv/
+env/
+.venv/
+.env/
+
 # Ignore macOS system files
 .DS_Store
 
