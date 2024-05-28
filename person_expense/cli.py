@@ -39,11 +39,21 @@ parser_list_persons = subparsers.add_parser('get_all_persons', help='Get List of
 # List all Transactions
 parser_list_transactions = subparsers.add_parser('get_all_transactions', help='Get List of All Transactions.')
 
-# Salary of yy:mm
-parser_salary_yy_mm = subparsers.add_parser('get_salary_by_yy_mm', help='Get Salary of a specific year and month.')
-parser_salary_yy_mm.add_argument('person_id', type=int, help='Enter person id')
-parser_salary_yy_mm.add_argument('year', type=str, help='Enter Year')
-parser_salary_yy_mm.add_argument('month', type=str, help='Enter month')
+# Total Debit of yy:mm
+parser_total_debit_yy_mm = subparsers.add_parser('get_total_debit_by_yy_mm',
+                                                 help='Get Total Debit of a specific year and month.')
+parser_total_debit_yy_mm.add_argument('person_id', type=int, help='Enter person id')
+parser_total_debit_yy_mm.add_argument('year', type=str, help='Enter Year')
+parser_total_debit_yy_mm.add_argument('month', type=str, help='Enter month')
+
+
+# Total Credit of yy:mm
+parser_total_credit_yy_mm = subparsers.add_parser('get_total_credit_by_yy_mm',
+                                                  help='Get Total Credit of a specific year and month.')
+parser_total_credit_yy_mm.add_argument('person_id', type=int, help='Enter person id')
+parser_total_credit_yy_mm.add_argument('year', type=str, help='Enter Year')
+parser_total_credit_yy_mm.add_argument('month', type=str, help='Enter month')
+
 
 args: Namespace = parser.parse_args()
 
@@ -54,6 +64,7 @@ if args.command == 'add_person':
 elif args.command == 'make_transaction':
     acc_serv.make_transaction(args.id, args.amount, args.type, args.date, args.reason, args.person_id)
 elif args.command == 'withdraw_money':
+    # It has some issues
     cli_serv.withdraw_money(args.id, args.amount)
 elif args.command == 'get_person_info':
     cli_serv.get_person_info(args.id)
@@ -61,8 +72,10 @@ elif args.command == 'delete_person':
     cli_serv.delete_person(args.id)
 elif args.command == 'get_all_persons':
     cli_serv.get_all_persons()
-elif args.command == 'get_salary_by_yy_mm':
-    acc_serv.get_debit_for_year_month(args.year, args.month, args.person_id)
+elif args.command == 'get_total_debit_by_yy_mm':
+    acc_serv.get_total_debit_for_year_month(args.year, args.month, args.person_id)
+elif args.command == 'get_total_credit_by_yy_mm':
+    acc_serv.get_total_credit_for_year_month(args.year, args.month, args.person_id)
 elif args.command == 'get_all_transactions':
     acc_serv.get_all_transactions()
 else:

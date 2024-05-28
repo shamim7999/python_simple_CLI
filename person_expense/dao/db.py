@@ -27,7 +27,7 @@ def setup_database():
     conn.close()
 
 
-def get_debit_for_year_month(year, month, person_id):
+def get_total_debit_for_year_month(year, month, person_id):
     conn = sqlite3.connect('person.db')
     cursor = conn.cursor()
     cursor.execute('''
@@ -46,7 +46,7 @@ def get_debit_for_year_month(year, month, person_id):
         return 0  # No salary recorded for the given year and month
 
 
-def get_credit_for_year_month(year, month, person_id):
+def get_total_credit_for_year_month(year, month, person_id):
     conn = sqlite3.connect('person.db')
     cursor = conn.cursor()
     cursor.execute('''
@@ -72,9 +72,9 @@ def make_new_transaction(account_id, amount, account_type, date, reason, person_
     year, month, curr_amount = date[0]+date[1]+date[2]+date[3], date[5]+date[6], 0.0
 
     if account_type == 'debit':
-        curr_amount = get_debit_for_year_month(account_id, year, month)
+        curr_amount = get_total_debit_for_year_month(account_id, year, month)
     else:
-        curr_amount = get_credit_for_year_month(account_id, year, month)
+        curr_amount = get_total_credit_for_year_month(account_id, year, month)
 
     cursor.execute('''
             INSERT INTO account (id, amount, type, date, reason, person_id)
